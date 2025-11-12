@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taschenrechner mit Easter Egg</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRePatArEMFbuNidSbMpjd-5_tWT3u1wL1ymFvayQeRd0Yli493BqLwjYY&s=10") no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background: rgba(0, 0, 0, 0);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    #display {
+      width: 250px;
+      height: 50px;
+      margin-bottom: 50px;
+      text-align: right;
+      font-size: 24px;
+      border: none;
+      border-radius: 10px;
+      padding: 5px;
+      background: #fff;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 50px);
+      gap: 10px;
+    }
+
+    button {
+      font-size: 20px;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    /* Pop-up */
+    .call-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      z-index: 999;
+    }
+
+    .call-popup img {
+      width: 200px;
+      border-radius: 20px;
+    }
+
+    .call-buttons {
+      margin-top: 20px;
+    }
+
+    .accept, .decline {
+      font-size: 20px;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      margin: 0 20px;
+      cursor: pointer;
+    }
+
+    .accept {
+      background-color: green;
+    }
+
+    .decline {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly>
+    <div class="buttons">
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button onclick="appendOperator('/')">÷</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button onclick="appendOperator('*')">×</button>
+
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button onclick="appendOperator('-')">−</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="appendOperator('+')">+</button>
+    </div>
+  </div>
+
+  <!-- Pop-up für Easter Egg -->
+  <div id="callPopup" class="call-popup">
+    <h2>Diddy is calling...</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Sean_Combs_in_2023.png" alt="Call Image">
+    <div class="call-buttons">
+      <button class="accept" onclick="endCall()">✅</button>
+      <button class="decline" onclick="endCall()">❌</button>
+    </div>
+  </div>
+
+  <audio id="callSound" src="https://s76-ious.freeconvert.com/task/6914fe4a5f036801e0fe573a/6e5ce8285dcebbcfc006d8946673aa95.mp3"></audio>
+
+  <script>
+    const display = document.getElementById('display');
+    const popup = document.getElementById('callPopup');
+    const callSound = document.getElementById('callSound');
+
+    function appendNumber(num) {
+      display.value += num;
+    }
+
+    function appendOperator(op) {
+      display.value += op;
+    }
+
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    function calculate() {
+      try {
+        const result = eval(display.value);
+        display.value = result;
+
+        // Easter Egg: 6 + 7 = 13
+        if (display.value === '13') {
+          popup.style.display = 'flex';
+          // Sound starten (wenn vorhanden)
+          callSound.play().catch(() => {});
+        }
+      } catch (e) {
+        display.value = 'Fehler';
+      }
+    }
+
+    function endCall() {
+      popup.style.display = 'none';
+      callSound.pause();
+      callSound.currentTime = 0;
+    }
+  </script>
+</body>
+</html>
